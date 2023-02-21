@@ -14,10 +14,45 @@ def create_dictionary
   dictionary
 end
 
+def get_valid_data(prompt, response, valid_responses) 
+  if response.nil?
+    print prompt
+    response = gets.chomp
+  else
+    valid_responses.each do |valid_response|
+      if response.downcase == valid_response.downcase
+        return response
+      elsif response.downcase == "exit"
+        puts "Thank you for using the Event Manager."
+        exit!
+      elsif response.downcase == "help"
+        print_actions(get_file_contents)
+        break
+      end
+    end
+    response = nil
+  end
+  response = get_valid_data(prompt, response, valid_responses)  
+end
+
+def welcome_player
+  puts "Hi and welcome to Hangman!"
+  print "What's your name? -> "
+  player_name = gets.chomp
+  puts "\nHi #{player_name}!"
+  puts "Would you like to: "
+  puts "   1. Start a new game"
+  puts "            OR"
+  puts "   2. Open a saved game"
+  action_prompt = "Please enter 1 or 2 for an action: "
+  action_choices = %w(1 2)
+  choice = get_valid_data(action_prompt, nil, action_choices)
+end
+
 def new_game
   dictionary = create_dictionary
   word_to_guess = dictionary.sample
-  puts word_to_guess
+  welcome_player
 end
 
 new_game
