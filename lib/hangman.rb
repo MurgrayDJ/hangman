@@ -14,6 +14,21 @@ def create_dictionary
   dictionary
 end
 
+def new_game
+  dictionary = create_dictionary
+  word_to_guess = dictionary.sample
+  puts "New game started!"
+end
+
+def saved_or_new_game(choice)
+  puts
+  if choice == "1"
+    new_game
+  else
+    puts "This functionality has not been implemented yet!"
+  end
+end
+
 def get_valid_data(prompt, response, valid_responses) 
   if response.nil?
     print prompt
@@ -23,7 +38,7 @@ def get_valid_data(prompt, response, valid_responses)
       if response.downcase == valid_response.downcase
         return response
       elsif response.downcase == "exit"
-        puts "Thank you for using the Event Manager."
+        puts "Thank you for playing!"
         exit!
       elsif response.downcase == "help"
         print_actions(get_file_contents)
@@ -37,7 +52,7 @@ end
 
 def welcome_player
   puts "Hi and welcome to Hangman!"
-  print "What's your name? -> "
+  print "What's your name?: "
   player_name = gets.chomp
   puts "\nHi #{player_name}!"
   puts "Would you like to: "
@@ -47,13 +62,8 @@ def welcome_player
   action_prompt = "Please enter 1 or 2 for an action: "
   action_choices = %w(1 2)
   choice = get_valid_data(action_prompt, nil, action_choices)
+  saved_or_new_game(choice)
 end
 
-def new_game
-  dictionary = create_dictionary
-  word_to_guess = dictionary.sample
-  welcome_player
-end
-
-new_game
+welcome_player
 
