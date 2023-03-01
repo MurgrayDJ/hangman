@@ -14,10 +14,22 @@ def create_dictionary
   dictionary
 end
 
+# def play_round
+#   while()
+# end
+
+def show_rules
+  puts "How to play: "
+  puts "You have to correctly guess all of the letters in the word."
+  puts "If you make 7 mistakes, you lose!"
+  puts "Let's get started!"
+end
+
 def new_game
   dictionary = create_dictionary
   word_to_guess = dictionary.sample
   puts "New game started!"
+  show_rules
 end
 
 def saved_or_new_game(choice)
