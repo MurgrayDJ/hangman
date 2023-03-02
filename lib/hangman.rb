@@ -47,10 +47,16 @@ class Hangman
     puts game_file.valid_letters.join(' ')
   end
 
+  def find_indices(word_to_guess, valid_guess)
+    indices = (0..word_to_guess.size).select { |i| word_to_guess[i] == valid_guess}
+    puts indices
+  end
+
   def play_round(game_file)
     print_progress(game_file)
     valid_guess = get_valid_guess(game_file)
     update_game_file(game_file, valid_guess)
+    find_indices(game_file.word_to_guess, valid_guess)
     print_progress(game_file)
   end
 
