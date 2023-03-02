@@ -20,9 +20,22 @@ class Hangman
     dictionary
   end
 
-  # def play_round
-  #   while()
-  # end
+  def play_game(game_file)
+    show_rules
+    #while(!game_over?)
+      play_round(game_file)
+    #end
+  end
+
+  def print_progress(game_file)
+    print "Word so far: #{game_file.guess_so_far.join(' ')} "
+    print "Errors: #{game_file.errors}/7 "
+    print "Letters guessed: #{game_file.guesses} "
+  end
+
+  def play_round(game_file)
+    print_progress(game_file)
+  end
 
   def show_rules
     puts "How to play: "
@@ -36,7 +49,8 @@ class Hangman
     word_to_guess = dictionary.sample
     game_file = GameInfo.new(word_to_guess)
     puts "New game started!"
-    show_rules
+    puts "\nWord to guess: #{word_to_guess}"
+    play_game(game_file)
   end
 
   def saved_or_new_game(choice)
