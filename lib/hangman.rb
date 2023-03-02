@@ -28,9 +28,10 @@ class Hangman
   end
 
   def print_progress(game_file)
+    puts
     print "Word so far: #{game_file.guess_so_far.join(' ')} "
     print "Errors: #{game_file.errors}/7 "
-    print "Letters guessed: #{game_file.guesses} "
+    print "Letters guessed: #{game_file.letters_guessed} "
     puts
   end
 
@@ -40,10 +41,17 @@ class Hangman
     valid_guess = get_valid_data(guess_prompt, nil, valid_guesses)
   end
 
+  def update_game_file(game_file, valid_guess)
+    game_file.letters_guessed << valid_guess
+    game_file.valid_letters.delete(valid_guess)
+    puts game_file.valid_letters.join(' ')
+  end
+
   def play_round(game_file)
     print_progress(game_file)
     valid_guess = get_valid_guess(game_file)
-    puts "Valid guess: #{valid_guess}"
+    update_game_file(game_file, valid_guess)
+    print_progress(game_file)
   end
 
   def show_rules
