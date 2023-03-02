@@ -20,44 +20,56 @@ class Hangman
     dictionary
   end
 
-  def play_game(game_file)
+  def play_game
     show_rules
     #while(!game_over?)
-      play_round(game_file)
+      play_round
     #end
   end
 
-  def print_progress(game_file)
+  def print_progress
     puts
-    print "Word so far: #{game_file.guess_so_far.join(' ')} "
-    print "Errors: #{game_file.errors}/7 "
-    print "Letters guessed: #{game_file.letters_guessed} "
+    print "Word so far: #{@@game_file.guess_so_far.join(' ')} "
+    print "Errors: #{@@game_file.errors}/7 "
+    print "Letters guessed: #{@@game_file.letters_guessed} "
     puts
   end
 
-  def get_valid_guess(game_file)
+  def get_valid_guess
     guess_prompt = "Make a guess: "
-    valid_guesses = game_file.valid_letters
+    valid_guesses = @@game_file.valid_letters
     valid_guess = get_valid_data(guess_prompt, nil, valid_guesses)
   end
 
-  def update_game_file(game_file, valid_guess)
-    game_file.letters_guessed << valid_guess
-    game_file.valid_letters.delete(valid_guess)
-    puts game_file.valid_letters.join(' ')
+  def update_game_file(valid_guess, is_right)
+    @@game_file.letters_guessed << valid_guess
+    @@game_file.valid_letters.delete(valid_guess)
+    # if is_right
+    #   @@game_file
+    #puts @@game_file.valid_letters.join(' ')
   end
 
   def find_indices(word_to_guess, valid_guess)
     indices = (0..word_to_guess.size).select { |i| word_to_guess[i] == valid_guess}
-    puts indices
   end
 
-  def play_round(game_file)
-    print_progress(game_file)
-    valid_guess = get_valid_guess(game_file)
-    update_game_file(game_file, valid_guess)
-    find_indices(game_file.word_to_guess, valid_guess)
-    print_progress(game_file)
+  def check_if_right(valid_guess)
+    indices = find_indices(@@game_file.word_to_guess, valid_guess)
+    if indices.empty?
+      puts "Oops maybe next time!"
+      update_game_file(valid_guess, false)
+    else
+      puts "Good guess!"
+      update_game_file(valid_guess, true)
+    end
+  end
+
+  def play_round
+    print_progress
+    valid_guess = get_valid_guess
+    check_if_right(valid_guess)
+
+    print_progress
   end
 
   def show_rules
@@ -70,10 +82,10 @@ class Hangman
   def new_game
     dictionary = create_dictionary
     word_to_guess = dictionary.sample
-    game_file = GameInfo.new(word_to_guess)
+    @@game_file = GameInfo.new(word_to_guess)
     puts "New game started!"
     puts "\nWord to guess: #{word_to_guess}"
-    play_game(game_file)
+    play_game
   end
 
   def saved_or_new_game(choice)
