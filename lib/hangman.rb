@@ -41,11 +41,14 @@ class Hangman
     valid_guess = get_valid_data(guess_prompt, nil, valid_guesses)
   end
 
-  def update_game_file(valid_guess, is_right)
+  def update_game_file(valid_guess, is_right, indices)
     @@game_file.letters_guessed << valid_guess
     @@game_file.valid_letters.delete(valid_guess)
-    # if is_right
-    #   @@game_file
+    if is_right
+      indices.each do |index|
+        @@game_file.guess_so_far[index] = valid_guess
+      end
+    end
     #puts @@game_file.valid_letters.join(' ')
   end
 
@@ -57,10 +60,10 @@ class Hangman
     indices = find_indices(@@game_file.word_to_guess, valid_guess)
     if indices.empty?
       puts "Oops maybe next time!"
-      update_game_file(valid_guess, false)
+      update_game_file(valid_guess, false, indices)
     else
       puts "Good guess!"
-      update_game_file(valid_guess, true)
+      update_game_file(valid_guess, true, indices)
     end
   end
 
