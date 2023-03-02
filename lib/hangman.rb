@@ -31,17 +31,26 @@ class Hangman
     print "Word so far: #{game_file.guess_so_far.join(' ')} "
     print "Errors: #{game_file.errors}/7 "
     print "Letters guessed: #{game_file.guesses} "
+    puts
+  end
+
+  def get_valid_guess(game_file)
+    guess_prompt = "Make a guess: "
+    valid_guesses = game_file.valid_letters
+    valid_guess = get_valid_data(guess_prompt, nil, valid_guesses)
   end
 
   def play_round(game_file)
     print_progress(game_file)
+    valid_guess = get_valid_guess(game_file)
+    puts "Valid guess: #{valid_guess}"
   end
 
   def show_rules
     puts "How to play: "
     puts "You have to correctly guess all of the letters in the word."
     puts "If you make 7 mistakes, you lose!"
-    puts "Let's get started!"
+    puts "\n\nLet's get started!"
   end
 
   def new_game
@@ -67,13 +76,14 @@ class Hangman
       print prompt
       response = gets.chomp
     else
+      response = response.downcase
       valid_responses.each do |valid_response|
-        if response.downcase == valid_response.downcase
+        if response == valid_response
           return response
-        elsif response.downcase == "exit"
+        elsif response == "exit"
           puts "Thank you for playing!"
           exit!
-        elsif response.downcase == "help"
+        elsif response == "help"
           print_actions(get_file_contents)
           break
         end
