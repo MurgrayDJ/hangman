@@ -122,12 +122,19 @@ class Hangman
     play_game
   end
 
+  def open_save
+    Dir.children("./savefiles").each_with_index do |save_file, file_number|
+      puts "#{file_number + 1}. #{save_file}"
+    end
+  end
+
   def saved_or_new_game(choice)
     puts
     if choice == "1"
       new_game
     else
-      puts "This functionality has not been implemented yet!"
+      open_save
+      #puts "This functionality has not been implemented yet!"
     end
   end
 
