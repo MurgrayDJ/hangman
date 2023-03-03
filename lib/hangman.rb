@@ -23,17 +23,22 @@ class Hangman
   def game_over?
     puts
     if @@game_file.errors == 7
+      print_progress
       puts "It looks like you're out of guesses!"
       puts "The answer was: #{@@game_file.word_to_guess}"
       true
     elsif  @@game_file.guess_so_far.none?("_")
+      print_progress
       puts "You guessed the word correctly! Great work!"
+      true
+    else
       false
     end
   end
 
   def play_game
     show_rules
+    puts "\nLet's get started!"
     while(!game_over?)
       play_round
     end
@@ -64,7 +69,6 @@ class Hangman
     else
       @@game_file.errors += 1
     end
-    #puts @@game_file.valid_letters.join(' ')
   end
 
   def find_indices(word_to_guess, valid_guess)
@@ -89,10 +93,11 @@ class Hangman
   end
 
   def show_rules
-    puts "How to play: "
+    puts "\nHow to play: "
     puts "You have to correctly guess all of the letters in the word."
     puts "If you make 7 mistakes, you lose!"
-    puts "\n\nLet's get started!"
+    puts "Type 'exit' at any time to leave."
+    puts "Type 'help' at any time to repeat this message.\n\n"
   end
 
   def new_game
@@ -126,7 +131,7 @@ class Hangman
           puts "Thank you for playing!"
           exit!
         elsif response == "help"
-          print_actions(get_file_contents)
+          show_rules
           break
         end
       end
