@@ -123,9 +123,16 @@ class Hangman
   end
 
   def open_save
-    Dir.children("./savefiles").each_with_index do |save_file, file_number|
-      puts "#{file_number + 1}. #{save_file}"
+    save_files = Dir.children("./savefiles")
+    save_files.unshift("blank")
+    save_files.each_with_index do |save_file, file_number|
+      puts "#{file_number}. #{save_file}"
     end
+
+    save_prompt = "Please pick a save file number: "
+    valid_save_nums = Array (1..save_files.length-1).map {|a| a.to_s}
+    save_num = get_valid_data(save_prompt, nil, valid_save_nums).to_i
+    puts "Save file chosen: #{save_num}. #{save_files[save_num]}"
   end
 
   def saved_or_new_game(choice)
