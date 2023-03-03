@@ -122,17 +122,30 @@ class Hangman
     play_game
   end
 
-  def open_save
+  def open_save(file_path)
+    if File.exist? file_path
+      save_contents = File.read(file_path)
+      puts save_contents
+    else
+      puts "Issue opening file. Please try a different one."
+    end
+  end
+
+  def find_save
     save_files = Dir.children("./savefiles")
     save_files.unshift("blank")
     save_files.each_with_index do |save_file, file_number|
-      puts "#{file_number}. #{save_file}"
+      if file_number != 0
+        puts "#{file_number}. #{save_file}"
+      end
     end
-
+    puts
     save_prompt = "Please pick a save file number: "
     valid_save_nums = Array (1..save_files.length-1).map {|a| a.to_s}
     save_num = get_valid_data(save_prompt, nil, valid_save_nums).to_i
     puts "Save file chosen: #{save_num}. #{save_files[save_num]}"
+    puts
+    open_save("./savefiles/#{save_files[save_num]}")
   end
 
   def saved_or_new_game(choice)
@@ -140,7 +153,7 @@ class Hangman
     if choice == "1"
       new_game
     else
-      open_save
+      find_save
       #puts "This functionality has not been implemented yet!"
     end
   end
@@ -148,7 +161,7 @@ class Hangman
   def save_game
     Dir.mkdir('savefiles') unless Dir.exist?('savefiles')
     date_and_time = Time.new.strftime("%Y-%m-%d_%H%M%S")
-    filename = "savefiles/hangman_#{date_and_time}"
+    filename = "savefiles/hangman_#{date_and_time}.txt"
   
     File.open(filename, 'w') do |file|
       file.puts @@game_info
