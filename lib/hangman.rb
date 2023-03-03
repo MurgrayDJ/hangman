@@ -20,11 +20,24 @@ class Hangman
     dictionary
   end
 
+  def game_over?
+    puts
+    if @@game_file.errors == 7
+      puts "It looks like you're out of guesses!"
+      puts "The answer was: #{@@game_file.word_to_guess}"
+      true
+    elsif  @@game_file.guess_so_far.none?("_")
+      puts "You guessed the word correctly! Great work!"
+      false
+    end
+  end
+
   def play_game
     show_rules
-    #while(!game_over?)
+    while(!game_over?)
       play_round
-    #end
+    end
+    puts "Thanks for playing! :D"
   end
 
   def print_progress
@@ -48,6 +61,8 @@ class Hangman
       indices.each do |index|
         @@game_file.guess_so_far[index] = valid_guess
       end
+    else
+      @@game_file.errors += 1
     end
     #puts @@game_file.valid_letters.join(' ')
   end
@@ -71,8 +86,6 @@ class Hangman
     print_progress
     valid_guess = get_valid_guess
     check_if_right(valid_guess)
-
-    print_progress
   end
 
   def show_rules
