@@ -134,13 +134,13 @@ class Hangman
   def save_game
     Dir.mkdir('savefiles') unless Dir.exist?('savefiles')
     date_and_time = Time.new.strftime("%Y-%m-%d_%H%M%S")
-    filename = "output/hangman_#{date_and_time}"
+    filename = "savefiles/hangman_#{date_and_time}"
   
     File.open(filename, 'w') do |file|
-      file.puts form_letter
+      file.puts @@game_info
     end
   
-    puts "thanks_#{id}.html created succesfully."
+    puts "#{filename} created succesfully."
   end
 
   def get_valid_data(prompt, response, valid_responses) 
@@ -153,7 +153,9 @@ class Hangman
         if response == valid_response
           return response
         elsif response == "save"
-          save_game
+          save_game 
+          puts "Thank you for playing!"
+          exit!
         elsif response == "exit"
           puts "Thank you for playing!"
           exit!
