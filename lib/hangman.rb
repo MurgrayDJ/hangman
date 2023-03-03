@@ -4,6 +4,13 @@
 require_relative 'game_info.rb'
 
 class Hangman
+  @@game_info = {
+    :letters_guessed => "",
+    :errors => 0,
+    :word_to_guess => "",
+    :valid_letters =>("a".."z").to_a,
+    :guess_so_far => ""
+  }
 
   def initialize
     welcome_player
@@ -22,12 +29,12 @@ class Hangman
 
   def game_over?
     puts
-    if @@game_file.errors == 7
+    if @@game_info[:errors] == 7
       print_progress
       puts "It looks like you're out of guesses!"
-      puts "The answer was: #{@@game_file.word_to_guess}"
+      puts "The answer was: #{@@game_info[:word_to_guess]}"
       true
-    elsif  @@game_file.guess_so_far.none?("_")
+    elsif  @@game_info[:guess_so_far].none?("_")
       print_progress
       puts "You guessed the word correctly! Great work!"
       true
@@ -47,27 +54,27 @@ class Hangman
 
   def print_progress
     puts
-    print "Word so far: #{@@game_file.guess_so_far.join(' ')} "
-    print "Errors: #{@@game_file.errors}/7 "
-    print "Letters guessed: #{@@game_file.letters_guessed} "
+    print "Word so far: #{@@game_info[:guess_so_far].join(' ')} "
+    print "Errors: #{@@game_info[:errors]}/7 "
+    print "Letters guessed: #{@@game_info[:letters_guessed]} "
     puts
   end
 
   def get_valid_guess
     guess_prompt = "Make a guess: "
-    valid_guesses = @@game_file.valid_letters
+    valid_guesses = @@game_info[:valid_letters]
     valid_guess = get_valid_data(guess_prompt, nil, valid_guesses)
   end
 
   def update_game_file(valid_guess, is_right, indices)
-    @@game_file.letters_guessed << valid_guess
-    @@game_file.valid_letters.delete(valid_guess)
+    @@game_info[:letters_guessed] << valid_guess
+    @@game_info[:valid_letters].delete(valid_guess)
     if is_right
       indices.each do |index|
-        @@game_file.guess_so_far[index] = valid_guess
+        @@game_info[:guess_so_far][index] = valid_guess
       end
     else
-      @@game_file.errors += 1
+      @@game_info[:errors] += 1
     end
   end
 
@@ -76,7 +83,7 @@ class Hangman
   end
 
   def check_if_right(valid_guess)
-    indices = find_indices(@@game_file.word_to_guess, valid_guess)
+    indices = find_indices(@@game_info[:word_to_guess], valid_guess)
     if indices.empty?
       puts "Oops maybe next time!"
       update_game_file(valid_guess, false, indices)
@@ -96,16 +103,22 @@ class Hangman
     puts "\nHow to play: "
     puts "You have to correctly guess all of the letters in the word."
     puts "If you make 7 mistakes, you lose!"
-    puts "Type 'exit' at any time to leave."
+    puts "Type save at any time to save the game and exit."
+    puts "Type 'exit' at any time to leave without saving."
     puts "Type 'help' at any time to repeat this message.\n\n"
   end
 
-  def new_game
+  def set_word_to_guess
     dictionary = create_dictionary
     word_to_guess = dictionary.sample
-    @@game_file = GameInfo.new(word_to_guess)
+    @@game_info[:word_to_guess] = word_to_guess
+    @@game_info[:guess_so_far] = Array.new(word_to_guess.length - 1) {"_"}
+  end
+
+  def new_game
+    set_word_to_guess
     puts "New game started!"
-    puts "\nWord to guess: #{word_to_guess}"
+    puts "\nWord to guess: #{@@game_info[:word_to_guess]}"
     play_game
   end
 
@@ -118,6 +131,18 @@ class Hangman
     end
   end
 
+  def save_game
+    Dir.mkdir('savefiles') unless Dir.exist?('savefiles')
+    date_and_time = Time.new.strftime("%Y-%m-%d_%H%M%S")
+    filename = "output/hangman_#{date_and_time}"
+  
+    File.open(filename, 'w') do |file|
+      file.puts form_letter
+    end
+  
+    puts "thanks_#{id}.html created succesfully."
+  end
+
   def get_valid_data(prompt, response, valid_responses) 
     if response.nil?
       print prompt
@@ -127,6 +152,8 @@ class Hangman
       valid_responses.each do |valid_response|
         if response == valid_response
           return response
+        elsif response == "save"
+          save_game
         elsif response == "exit"
           puts "Thank you for playing!"
           exit!
