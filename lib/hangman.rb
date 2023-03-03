@@ -2,6 +2,7 @@
 #Date created: 2/21/2023
 #Purpose: To play a simple game of hangman against a computer
 require_relative 'game_info.rb'
+require 'json'
 
 class Hangman
   @@game_info = {
@@ -110,7 +111,7 @@ class Hangman
 
   def set_word_to_guess
     dictionary = create_dictionary
-    word_to_guess = dictionary.sample
+    word_to_guess = dictionary.sample.chomp
     @@game_info[:word_to_guess] = word_to_guess
     @@game_info[:guess_so_far] = Array.new(word_to_guess.length - 1) {"_"}
   end
@@ -125,7 +126,8 @@ class Hangman
   def open_save(file_path)
     if File.exist? file_path
       save_contents = File.read(file_path)
-      puts save_contents
+      @@game_info = JSON.parse save_contents.to_json
+      puts @@game_info
     else
       puts "Issue opening file. Please try a different one."
     end
