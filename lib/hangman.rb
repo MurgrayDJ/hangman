@@ -55,6 +55,7 @@ class Hangman
   end
 
   def prompt_replay
+    puts
     replay_prompt = "Would you like to play again? (Y/N): "
     valid_response = ["y", "n"]
     response = get_valid_data(replay_prompt, nil, valid_response)
@@ -145,7 +146,6 @@ class Hangman
   def new_game
     set_word_to_guess
     puts "New game started!"
-    puts "\nWord to guess: #{@@game_info[:word_to_guess]}"
     play_game
   end
 
@@ -184,7 +184,6 @@ class Hangman
       new_game
     else
       find_save
-      #puts "This functionality has not been implemented yet!"
     end
   end
 
