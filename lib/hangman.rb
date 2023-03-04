@@ -13,6 +13,16 @@ class Hangman
     :guess_so_far => ""
   }
 
+  def set_game_defaults
+    default_hash = {
+      :letters_guessed => "",
+      :errors => 0,
+      :word_to_guess => "",
+      :valid_letters =>("a".."z").to_a,
+      :guess_so_far => ""
+    }
+  end
+
   def initialize
     welcome_player
   end
@@ -44,13 +54,29 @@ class Hangman
     end
   end
 
+  def prompt_replay
+    replay_prompt = "Would you like to play again? (Y/N): "
+    valid_response = ["y", "n"]
+    response = get_valid_data(replay_prompt, nil, valid_response)
+  end
+
+  def replay
+    @@game_info = set_game_defaults
+    new_game
+  end
+
   def play_game
     show_rules
     puts "\nLet's get started!"
     while(!game_over?)
       play_round
     end
-    puts "Thanks for playing! :D"
+    restart = prompt_replay
+    if restart == "y"
+      replay
+    else
+      puts "Thanks for playing! :D"
+    end
   end
 
   def print_progress
