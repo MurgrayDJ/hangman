@@ -126,8 +126,9 @@ class Hangman
   def open_save(file_path)
     if File.exist? file_path
       save_contents = File.read(file_path)
-      @@game_info = JSON.parse save_contents.to_json
-      puts @@game_info
+      @@game_info = JSON.parse save_contents.gsub('=>', ':')
+      @@game_info.transform_keys!(&:to_sym)
+      play_game
     else
       puts "Issue opening file. Please try a different one."
     end
@@ -166,7 +167,7 @@ class Hangman
     filename = "savefiles/hangman_#{date_and_time}.txt"
   
     File.open(filename, 'w') do |file|
-      file.puts @@game_info
+      file.puts @@game_info.to_json
     end
   
     puts "#{filename} created succesfully."

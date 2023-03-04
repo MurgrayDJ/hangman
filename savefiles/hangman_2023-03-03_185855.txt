@@ -1,0 +1,1 @@
+{"letters_guessed":"e","errors":0,"word_to_guess":"shore","valid_letters":["a","b","c","d","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],"guess_so_far":["_","_","_","_","e"]}
