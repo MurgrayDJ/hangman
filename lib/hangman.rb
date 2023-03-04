@@ -139,7 +139,7 @@ class Hangman
     dictionary = create_dictionary
     word_to_guess = dictionary.sample.chomp
     @@game_info[:word_to_guess] = word_to_guess
-    @@game_info[:guess_so_far] = Array.new(word_to_guess.length - 1) {"_"}
+    @@game_info[:guess_so_far] = Array.new(word_to_guess.length) {"_"}
   end
 
   def new_game
