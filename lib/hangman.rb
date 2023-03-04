@@ -1,7 +1,6 @@
 #Author: Murgray D. John
 #Date created: 2/21/2023
 #Purpose: To play a simple game of hangman against a computer
-require_relative 'game_info.rb'
 require 'json'
 
 class Hangman
