@@ -154,6 +154,7 @@ class Hangman
       save_contents = File.read(file_path)
       @@game_info = JSON.parse save_contents.gsub('=>', ':')
       @@game_info.transform_keys!(&:to_sym)
+      File.delete(file_path)
       play_game
     else
       puts "Issue opening file. Please try a different one."
@@ -234,6 +235,8 @@ class Hangman
     puts "   1. Start a new game"
     puts "            OR"
     puts "   2. Open a saved game"
+    puts "*Save files are deleted after being reopened."
+    puts
     action_prompt = "Please enter 1 or 2 for an action: "
     action_choices = %w(1 2)
     choice = get_valid_data(action_prompt, nil, action_choices)
