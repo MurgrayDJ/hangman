@@ -1,6 +1,8 @@
 # hangman
 A simple command line Hangman game
 
+![hangman_screenshot](https://user-images.githubusercontent.com/36339824/222865920-8aadf2f2-183f-4617-ab26-0b3a7b695ac7.png)
+
 ## How to Play
 This is displayed when a game is started:
 > You have to correctly guess all of the letters in the word.
