@@ -22,7 +22,7 @@ class Hangman
     }
   end
 
-  def initialize
+  def run_game
     welcome_player
   end
 
@@ -242,5 +242,7 @@ class Hangman
   end
 end
 
-Hangman.new
+# new_game = Hangman.new
+# new_game.run_game
+
 
