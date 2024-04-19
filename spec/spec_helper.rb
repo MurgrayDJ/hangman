@@ -18,6 +18,20 @@ RSpec.configure do |config|
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
   config.expect_with :rspec do |expectations|
+    ## Sends console writes to external file
+    original_stderr = $stderr
+    original_stdout = $stdout
+    error_path = File.join(File.dirname(__FILE__), 'txt_files/error_output.txt')
+    output_path = File.join(File.dirname(__FILE__), 'txt_files/console_output.txt')
+    config.before(:all) do
+      # Redirect stderr and stdout
+      $stderr = File.open(error_path, "w") 
+      $stdout = File.open(output_path, "w") 
+    end
+    config.after(:all) do
+      $stderr = original_stderr
+      $stdout = original_stdout
+    end
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
     # defined using `chain`, e.g.:
